@@ -1,0 +1,77 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Group {
+  id           Int      @id @default(autoincrement())
+  name         String
+  groupPassword     String
+  imageUrl     String
+  isPublic     Boolean
+  likeCount    Int     @default(0)
+  badges       Badge[] @relation("GroupBadges")
+  postCount    Int     @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  introduction String
+  posts        Post[]
+
+  @@map("groups")  
+}
+
+model Badge {
+  id     Int    @id @default(autoincrement())
+  name   String
+  groups Group[] @relation("GroupBadges")
+   @@map("badges")
+}
+
+
+
+model Post {
+  id           Int      @id @default(autoincrement()) 
+  nickname     String
+  title        String
+  content      String
+  imageUrl     String
+  postPassword     String
+  tags         Tag[]  @relation("PostTags")
+  location     String
+  moment       DateTime
+  isPublic     Boolean
+  likeCount    Int      @default(0)
+  commentCount Int      @default(0)
+  createdAt    DateTime @default(now())
+  comments     Comment[] 
+
+  groupId      Int      // Group 모델과 연결되는 외래 키
+  group        Group?    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@map("posts")
+}
+
+model Tag {
+  id     Int    @id @default(autoincrement())
+  name   String
+  posts  Post[] @relation("PostTags")
+  @@map("tags")
+}
+
+model Comment {
+    id           Int      @id @default(autoincrement())
+    nickname     String 
+    commentPassword     String
+    content      String
+    createdAt    DateTime @default(now())
+
+    postId     Int      // Post 모델과 연결되는 외래 키
+    post       Post     @relation(fields: [postId], references: [id]) 
+
+    @@map("comments")
+}
