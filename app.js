@@ -13,6 +13,38 @@ app.listen(4000, () => {
   console.log("서버가 열렸습니다");
 });
 
+app.get("/groups", async (req, res) => {
+  res.json({
+    currentPage: 1,
+    totalPages: 5,
+    totalItemCount: 50,
+    data: [
+      {
+        id: 1,
+        name: "string",
+        imageUrl: "string",
+        isPublic: true,
+        likeCount: 0,
+        badgeCount: 0,
+        postCount: 0,
+        createdAt: "2024-02-22T07:47:49.803Z",
+        introduction: "string",
+      },
+      {
+        id: 2,
+        name: "string",
+        imageUrl: "string",
+        isPublic: true,
+        likeCount: 0,
+        badgeCount: 0,
+        postCount: 0,
+        createdAt: "2024-02-22T07:47:49.803Z",
+        introduction: "string",
+      },
+    ],
+  });
+});
+
 //그룹 등록 완료
 app.post("/groups", async (req, res) => {
   var { name, password, imageUrl, isPublic, introduction } = req.body;
